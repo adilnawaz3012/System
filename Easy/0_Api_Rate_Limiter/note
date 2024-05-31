@@ -1,0 +1,53 @@
+Ref: https://www.tryexponent.com/blog/rate-limiter-system-design
+Youtube: https://www.youtube.com/watch?v=SgWb6tWx3S8&t=1249s
+
+
+1. What is Rate LImiter?
+2. Why do we need rate limiters?
+3. Implement server side vs client side rate limiters:
+    - Server side
+        - most comman is using IP address 
+            - unique to user
+            - narrow down set of IP which have problems
+            - user_id can be faked with new accounts
+        - need to inform user about it, from server side we sent 429 response code that they have been throtlled.
+        - we need to have logging mech in our side to do analysis on tarffic patterns. ( ie retropection )
+4. Technique to rate limit: ie algo [ and up and down side of each ]
+    - Tocken bucket system
+    - Fixed Windown System
+    - to overcome fix window, we can use sliding window system
+5. If we need to design Twitter, then what algo we will use?
+    - use sliding window ( what limit goona set ? => it'll be based on config of system )
+    - we can design using Rule Engine
+        - size of window
+        - # of counter in each window
+        - slding scale
+        - user_id/ IP
+        - geography
+
+6. High Level Design:
+    - Consists of few components: [ we'll server side, as client side it can be forged / bypass by malaciuos users ]
+        - Rate Limiter Middleware just before server processing
+        - Rule Engine [ see above ]
+        - Cache ( with high thoughput ) ( to store the behaviuor of each request )
+        - in parallel, we can have logging service to save the logs for future analysis
+        
+7. Drawing: 
+    - Api middlewARE  is JUST An IF else statement
+    - 
+
+8. Modify it for distributed ENV:
+    - Add load balancer before api rate limitter
+    - Have multiple rat elimiter based on different data centres
+    - What needs to remains const / scale horizontally ( cache ) ie. one comman/ shared cache accross distributed network
+    - Cache can be divided into read and write cache 
+    - Rules can be diffeent based on the data centre ( rules don't change frequently and persits iver large time )
+    - Rate limiter for different geography's ?
+        - not a good option as people can use VPN to mimic the other geo and take beinfit of it which will end up bypassing the logic of rate limitting.
+        - User's case: user is rate limitted, and user have no malacious intent, what strategy user will use to overcome it?
+            - like user using Stripe API ( so user should know stripe limit and user's application tarffic pattern )
+                - so user can be right tier to have more access to the API's
+            - when user got 429 ,handle it garcefully ( try after sometime / built retrying mechanism )
+            - 
+
+
