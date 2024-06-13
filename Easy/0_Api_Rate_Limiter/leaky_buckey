@@ -1,0 +1,10 @@
+Ref: https://systemsdesign.cloud/SystemDesign/RateLimiter
+
+- Leaky Bucket algorithm:
+    - Instead of tokens, it is filled with requests from that client.
+    - Requests are taken out of the bucket and processed at a constant rate. If the rate at which requests arrive is greater than the rate at which requests are processed, the bucket will fill up and further requests will be dropped until there is space in the bucket.
+    - For each request a user makes,
+        - Check if the queue limit is exceeded.
+        - If the queue limit has exceeded, the request is dropped.
+        - Otherwise, we add requests to queue end and handle the incoming request.
+    

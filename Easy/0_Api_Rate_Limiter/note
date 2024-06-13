@@ -1,11 +1,20 @@
 Ref: https://www.tryexponent.com/blog/rate-limiter-system-design
 Youtube: https://www.youtube.com/watch?v=SgWb6tWx3S8&t=1249s
+LeetCode: https://leetcode.com/discuss/interview-question/system-design/1616482/System-Design%3A-Rate-Limiter ( have design pic too)
+Medium: https://medium.com/geekculture/system-design-design-a-rate-limiter-81d200c9d392
+Code for each algorithm: https://medium.com/@tahir.rauf/system-design-rate-limiter-5d3c7171d9af
+
+
 
 
 1. What is Rate LImiter?
 2. Why do we need rate limiters?
-3. Implement server side vs client side rate limiters:
+3. Implement server side vs client side rate limiters: 
+    - We have generally 3 places: Client-side, Server-side, or middleware.
+    - Client Side:
+        - The client is an unreliable place to enforce rate limiting because client requests can easily be forged by malicious actors.
     - Server side
+        - Even better than placing it on the server side is to use a rate limiter middleware, which will throttle excess requests even to our server side. So, if you are using a microservice architecture and already using functionalities like authentication middleware, a similar basis you can implement rate limiter middleware alongside it.
         - most comman is using IP address 
             - unique to user
             - narrow down set of IP which have problems

@@ -1,0 +1,18 @@
+Ref: https://systemsdesign.cloud/SystemDesign/RateLimiter
+
+- Fixed Window Counter algorithm:
+  - We keep a counter for a given duration of time, and keep incrementing it for every request we get. 
+  Once the limit is reached, we drop all further requests till the time duration is reset.
+  - The advantage here is that it ensures that most recent requests are served without being starved by old requests
+  - It can sometimes let through twice the number of allowed requests per minute. 
+  For example, if our rate limit were 5 requests per minute and a user made 5 requests at 11:00:59, 
+  they could make 5 more requests at 11:01:00 because a new counter begins at the start of each minute. 
+  Despite a rate limit of 5 requests per minute, we’ve now allowed 10 requests in less than one minute!
+
+  - Algorithm:
+    - For each request a user makes,
+    - Check if the user has exceeded the limit in the current window.
+    - If the user has exceeded the limit, the request is dropped
+    - Otherwise, we increment the counter
+
+  - 
